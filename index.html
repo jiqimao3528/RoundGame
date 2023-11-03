@@ -175,6 +175,12 @@
       //   canvas.style.height = "720px";
       // }
 
+      //新增代码 当移动端展示WebGL页面时，给个提示
+      
+      if ((/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+        unityShowBanner('前往PC，获得更佳体验');
+      }
+      //新增代码结束
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
