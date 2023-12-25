@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>知识远征</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
+    <style>
+        /* 您原有的CSS样式保持不变 */
+
+        /* 使用JavaScript动态添加的横屏样式 */
+        #unity-container.rotated {
+            transform: rotate(-90deg);
+            transform-origin: left top;
+            position: absolute;
+            width: 100vh;
+            height: 100vw;
+            top: 100%;
+            left: 0;
+        }
+    </style>
+</head>
   <body>
     <!-- 新增一个div用于记录屏幕的宽高 -->
     <div id="screen-param">
@@ -148,6 +162,38 @@
   //   iframe.style.position = 'relative';
   // }
       }
+
+        function applyLandscapeOrientation() {
+            var container = document.getElementById('unity-container');
+            if (window.innerWidth < window.innerHeight) {
+                container.classList.add('rotated');
+            } else {
+                container.classList.remove('rotated');
+            }
+        }
+
+        function checkIfMobile() {
+            return (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        function updateOrientationStyles() {
+            var container = document.getElementById('unity-container');
+            if (checkIfMobile()) {
+                // 应用样式
+                container.classList.add('rotated');
+                applyLandscapeOrientation();
+            } else {
+                // 移除样式
+                container.classList.remove('rotated');
+            }
+        }
+
+        // 监听窗口尺寸变化和设备方向变化事件
+        window.addEventListener('resize', updateOrientationStyles, false);
+        window.addEventListener('orientationchange', updateOrientationStyles, false);
+
+        // 页面加载时执行一次检查
+        updateOrientationStyles();
 
       //新增代码结束
 

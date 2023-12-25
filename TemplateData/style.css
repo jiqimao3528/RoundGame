@@ -64,7 +64,7 @@ html {
   height: 100%;
   position: relative;
   overflow: hidden;
-  /* padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); */
+  /* padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); 这段代码可能导致在手机上包含安全区的时候，计算页面宽高不正确，导致布局错误 */
 }
 
 #unity-canvas {
