@@ -6,17 +6,6 @@
     <title>知识远征</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <style>
-        #unity-container.rotated, #unity-canvas.rotated {
-            transform: rotate(-90deg);
-            transform-origin: left top;
-            position: absolute;
-            width: 100vh;
-            height: 100vw;
-            top: 100%;
-            left: 0;
-        }
-    </style>
 </head>
   <body>
     <!-- 新增一个div用于记录屏幕的宽高 -->
@@ -136,11 +125,11 @@
 
             
             // 如果处于横屏模式，交换宽高值以适配横屏
-            if (checkIfMobile() && checkIfPortaint()) {
-                var temp = screenWidth;
-                screenWidth = screenHeight;
-                screenHeight = temp;
-            }
+            //if (checkIfMobile() && checkIfPortaint()) {
+            //    var temp = screenWidth;
+            //    screenWidth = screenHeight;
+            //    screenHeight = temp;
+            //}
 
             // 计算缩放比例
             var ratio = Math.min(screenWidth / gameWidth, screenHeight / gameHeight);
@@ -161,17 +150,17 @@
             container.height = gameHeight * ratio * devicePixelRatio;
         }
 
-        function applyLandscapeOrientation() {
-            var container = document.getElementById('unity-container');
-            var canvas = document.getElementById('unity-canvas');
-            if (checkIfMobile() && checkIfPortaint()) {
-                container.classList.add('rotated');
-                canvas.classList.add('rotated');
-            } else {
-                container.classList.remove('rotated');
-                canvas.classList.remove('rotated');
-            }
-        }
+        //function applyLandscapeOrientation() {
+        //    var container = document.getElementById('unity-container');
+        //    var canvas = document.getElementById('unity-canvas');
+        //    if (checkIfMobile() && checkIfPortaint()) {
+        //        container.classList.add('rotated');
+        //        canvas.classList.add('rotated');
+        //    } else {
+        //        container.classList.remove('rotated');
+        //        canvas.classList.remove('rotated');
+        //    }
+        //}
 
         function checkIfMobile() {
             return (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -188,24 +177,24 @@
             return isPortaint;
         }
 
-        function updateOrientationStyles() {
-            applyLandscapeOrientation();
-        }
+        //function updateOrientationStyles() {
+        //    applyLandscapeOrientation();
+        //}
 
         // 监听窗口尺寸变化和设备方向变化事件
         window.addEventListener('resize', function () {
             resizeGame();
-            updateOrientationStyles();
+            //updateOrientationStyles();
         }, false);
         window.addEventListener('orientationchange', function () {
             resizeGame();
-            updateOrientationStyles();
+            //updateOrientationStyles();
         }, false);
 
         // 页面加载时执行一次检查
         window.addEventListener('load', function () {
             resizeGame();
-            updateOrientationStyles();
+            //updateOrientationStyles();
         });
 
       //新增代码结束
