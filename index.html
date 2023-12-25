@@ -7,10 +7,7 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <style>
-        /* 您原有的CSS样式保持不变 */
-
-        /* 使用JavaScript动态添加的横屏样式 */
-        #unity-container.rotated {
+        #unity-container.rotated, #unity-canvas.rotated {
             transform: rotate(-90deg);
             transform-origin: left top;
             position: absolute;
@@ -84,11 +81,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/1.loader.js";
+      var loaderUrl = buildUrl + "/3.loader.js";
       var config = {
-        dataUrl: buildUrl + "/1.data.unityweb",
-        frameworkUrl: buildUrl + "/1.framework.js.unityweb",
-        codeUrl: buildUrl + "/1.wasm.unityweb",
+        dataUrl: buildUrl + "/3.data.unityweb",
+        frameworkUrl: buildUrl + "/3.framework.js.unityweb",
+        codeUrl: buildUrl + "/3.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "知识远征",
@@ -125,9 +122,8 @@
       // }
 
       // resizeGame();
-      window.addEventListener('resize', resizeGame);
+      //window.addEventListener('resize', resizeGame);
       //window.addEventListener('load', resizeGame);
-
 
         function resizeGame() {
             // 获取原始游戏的理想宽高比
@@ -138,11 +134,9 @@
             var screenWidth = screenParam.offsetWidth;
             var screenHeight = screenParam.offsetHeight;
 
-            // 如果屏幕宽度小于高度，并且是移动端，则强制将宽高对调
-            var isPortraitAndMobile = checkIfPortraitAndMobile();
-
+            
             // 如果处于横屏模式，交换宽高值以适配横屏
-            if (isPortraitAndMobile) {
+            if (checkIfMobile() && checkIfPortaint()) {
                 var temp = screenWidth;
                 screenWidth = screenHeight;
                 screenHeight = temp;
@@ -169,24 +163,33 @@
 
         function applyLandscapeOrientation() {
             var container = document.getElementById('unity-container');
-            var isLandscape = screenParam.offsetWidth > screenParam.offsetHeight;
-            if (isLandscape) {
-                container.classList.remove('rotated');
-            } else {
+            var canvas = document.getElementById('unity-canvas');
+            if (checkIfMobile() && checkIfPortaint()) {
                 container.classList.add('rotated');
+                canvas.classList.add('rotated');
+            } else {
+                container.classList.remove('rotated');
+                canvas.classList.remove('rotated');
             }
         }
 
-        function checkIfPortraitAndMobile() {
+        function checkIfMobile() {
+            return (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        // 检测是否是竖屏
+        function checkIfPortaint() {
+            // 获取屏幕参数的宽高
             var screenWidth = screenParam.offsetWidth;
             var screenHeight = screenParam.offsetHeight;
-            return screenWidth < screenHeight && (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+            var isPortaint = screenWidth < screenHeight;
+
+            return isPortaint;
         }
 
         function updateOrientationStyles() {
-            if (checkIfPortraitAndMobile()) {
-                applyLandscapeOrientation();
-            }
+            applyLandscapeOrientation();
         }
 
         // 监听窗口尺寸变化和设备方向变化事件
