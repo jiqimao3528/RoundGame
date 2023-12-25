@@ -126,42 +126,46 @@
 
       // resizeGame();
       window.addEventListener('resize', resizeGame);
-      window.addEventListener('load', resizeGame);
+      //window.addEventListener('load', resizeGame);
 
-      function resizeGame() {
-        var width = 1920; 
-        var height = 1080; 
 
-        // 通过真实屏幕宽高获取比例
-        var ratio = Math.min(screenParam.offsetWidth / width, screenParam.offsetHeight / height);
-        var devicePixelRatio = window.devicePixelRatio || 1;
+        function resizeGame() {
+            // 获取原始游戏的理想宽高比
+            var gameWidth = 1920;
+            var gameHeight = 1080;
 
-        canvas.style.width = (width * ratio) + 'px';
-        canvas.style.height = (height * ratio) + 'px';
-        canvas.width = width * ratio * devicePixelRatio;
-        canvas.height = height * ratio * devicePixelRatio;
+            // 获取屏幕参数的宽高
+            var screenWidth = screenParam.offsetWidth;
+            var screenHeight = screenParam.offsetHeight;
 
-        // 将container的宽高设置的和canvas一样，保证Vuplex加载的webview的iframe也能够正确的缩放。否则会出现iframe的位置、宽高不正确的问题。
-        container.style.width = (width * ratio) + 'px';
-        container.style.height = (height * ratio) + 'px';
-        container.width = width * ratio * devicePixelRatio;
-        container.height = height * ratio * devicePixelRatio;
+            // 如果屏幕宽度小于高度，并且是移动端，则强制将宽高对调
+            var isPortraitAndMobile = checkIfPortraitAndMobile();
 
-        // 1. 寻找页面中的 iframe。
-  // var iframe = document.querySelector('iframe');
-  // if(iframe) {
-  //   // 2. 使用 canvas 的缩放比例来调整 iframe 的大小。
-  //   // iframe.style.width = (iframe.offsetWidth * ratio) + 'px';
-  //   // iframe.style.height = (iframe.offsetHeight * ratio) + 'px';
+            // 如果处于横屏模式，交换宽高值以适配横屏
+            if (isPortraitAndMobile) {
+                var temp = screenWidth;
+                screenWidth = screenHeight;
+                screenHeight = temp;
+            }
 
-  //   // // 3. 根据 canvas 的位置来重新定位 iframe。
-  //   // var canvasPosition = canvas.getBoundingClientRect();
-  //   // iframe.style.left = canvasPosition.left + 'px';
-  //   // iframe.style.top = canvasPosition.top + 'px';
+            // 计算缩放比例
+            var ratio = Math.min(screenWidth / gameWidth, screenHeight / gameHeight);
+            var devicePixelRatio = window.devicePixelRatio || 1;
 
-  //   iframe.style.position = 'relative';
-  // }
-      }
+            // 应用新的宽高设置
+            var newWidth = (gameWidth * ratio) + 'px';
+            var newHeight = (gameHeight * ratio) + 'px';
+
+            canvas.style.width = newWidth;
+            canvas.style.height = newHeight;
+            canvas.width = gameWidth * ratio * devicePixelRatio;
+            canvas.height = gameHeight * ratio * devicePixelRatio;
+
+            container.style.width = newWidth;
+            container.style.height = newHeight;
+            container.width = gameWidth * ratio * devicePixelRatio;
+            container.height = gameHeight * ratio * devicePixelRatio;
+        }
 
         function applyLandscapeOrientation() {
             var container = document.getElementById('unity-container');
@@ -173,12 +177,14 @@
             }
         }
 
-        function checkIfMobile() {
-            return (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        function checkIfPortraitAndMobile() {
+            var screenWidth = screenParam.offsetWidth;
+            var screenHeight = screenParam.offsetHeight;
+            return screenWidth < screenHeight && (/iPad|iPhone|iPod|Android/.test(navigator.userAgent)) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         }
 
         function updateOrientationStyles() {
-            if (checkIfMobile()) {
+            if (checkIfPortraitAndMobile()) {
                 applyLandscapeOrientation();
             }
         }
