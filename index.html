@@ -165,10 +165,11 @@
 
         function applyLandscapeOrientation() {
             var container = document.getElementById('unity-container');
-            if (window.innerWidth < window.innerHeight) {
-                container.classList.add('rotated');
-            } else {
+            var isLandscape = screenParam.offsetWidth > screenParam.offsetHeight;
+            if (isLandscape) {
                 container.classList.remove('rotated');
+            } else {
+                container.classList.add('rotated');
             }
         }
 
@@ -177,23 +178,26 @@
         }
 
         function updateOrientationStyles() {
-            var container = document.getElementById('unity-container');
             if (checkIfMobile()) {
-                // 应用样式
-                container.classList.add('rotated');
                 applyLandscapeOrientation();
-            } else {
-                // 移除样式
-                container.classList.remove('rotated');
             }
         }
 
         // 监听窗口尺寸变化和设备方向变化事件
-        window.addEventListener('resize', updateOrientationStyles, false);
-        window.addEventListener('orientationchange', updateOrientationStyles, false);
+        window.addEventListener('resize', function () {
+            updateOrientationStyles();
+            resizeGame();
+        }, false);
+        window.addEventListener('orientationchange', function () {
+            updateOrientationStyles();
+            resizeGame();
+        }, false);
 
         // 页面加载时执行一次检查
-        updateOrientationStyles();
+        window.addEventListener('load', function () {
+            updateOrientationStyles();
+            resizeGame();
+        });
 
       //新增代码结束
 
